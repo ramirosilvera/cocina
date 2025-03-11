@@ -1,76 +1,228 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Plano Cocina - Vista A</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <!-- Usamos SVG para mantener la precisión del plano -->
-    <svg width="1130" height="800" viewBox="0 0 1130 800" xmlns="http://www.w3.org/2000/svg">
-      <!-- Encabezados y título -->
-      <text x="50" y="40" font-size="32" font-family="Arial" font-weight="bold">VISTA A</text>
-      <text x="50" y="80" font-size="16" font-family="Arial">Model</text>
-      
-      <!-- Datos principales -->
-      <text x="50" y="110" font-size="14" font-family="Arial">113.0</text>
-      <text x="50" y="130" font-size="14" font-family="Arial">35343332</text>
-      <text x="50" y="150" font-size="14" font-family="Arial">3029282726</text>
-      
-      <!-- Serie de medidas -->
-      <text x="50" y="180" font-size="14" font-family="Arial">38</text>
-      <text x="100" y="180" font-size="14" font-family="Arial">39</text>
-      <text x="150" y="180" font-size="14" font-family="Arial">40</text>
-      <text x="200" y="180" font-size="14" font-family="Arial">41</text>
-      <text x="250" y="180" font-size="14" font-family="Arial">44 45</text>
-      <text x="350" y="180" font-size="14" font-family="Arial">31</text>
-      <text x="400" y="180" font-size="14" font-family="Arial">37</text>
-      <text x="450" y="180" font-size="14" font-family="Arial">36</text>
-      <text x="500" y="180" font-size="14" font-family="Arial">25</text>
-      <text x="550" y="180" font-size="14" font-family="Arial">42 43</text>
-      <text x="650" y="180" font-size="14" font-family="Arial">13</text>
-      <text x="700" y="180" font-size="14" font-family="Arial">4</text>
-      
-      <!-- Detalle adicional -->
-      <text x="50" y="220" font-size="14" font-family="Arial">Detalle calado para</text>
-      <text x="50" y="240" font-size="14" font-family="Arial">iluminacion mod. 8-9</text>
-      
-      <!-- Medidas adicionales -->
-      <text x="50" y="280" font-size="14" font-family="Arial">80.0</text>
-      <text x="120" y="280" font-size="14" font-family="Arial">40.0</text>
-      <text x="190" y="280" font-size="14" font-family="Arial">20.0</text>
-      <text x="260" y="280" font-size="14" font-family="Arial">58.0</text>
-      <text x="330" y="280" font-size="14" font-family="Arial">2.0</text>
-      <text x="380" y="280" font-size="14" font-family="Arial">80.0</text>
-      <text x="450" y="280" font-size="14" font-family="Arial">10.0</text>
-      <text x="500" y="280" font-size="14" font-family="Arial">35.0</text>
-      <text x="560" y="280" font-size="14" font-family="Arial">1.8</text>
-      <text x="600" y="280" font-size="14" font-family="Arial">101.0</text>
-      <text x="680" y="280" font-size="14" font-family="Arial">60.2</text>
-      <text x="750" y="280" font-size="14" font-family="Arial">2.0</text>
-      <text x="800" y="280" font-size="14" font-family="Arial">80.0</text>
-      <text x="850" y="280" font-size="14" font-family="Arial">10.0</text>
-      <text x="900" y="280" font-size="14" font-family="Arial">75.0</text>
-      <text x="970" y="280" font-size="14" font-family="Arial">5.0</text>
-      <text x="1020" y="280" font-size="14" font-family="Arial">25.8</text>
-      <text x="1070" y="280" font-size="14" font-family="Arial">1.8</text>
-      
-      <!-- Más detalles -->
-      <text x="50" y="320" font-size="14" font-family="Arial">51.0 102.0 102.0</text>
-      <text x="50" y="340" font-size="14" font-family="Arial">1.8</text>
-      <text x="120" y="340" font-size="14" font-family="Arial">4.4</text>
-      <text x="190" y="340" font-size="14" font-family="Arial">151.2</text>
-      <text x="260" y="340" font-size="14" font-family="Arial">1.8</text>
-      <text x="310" y="340" font-size="14" font-family="Arial">102.0 102.0 102.0 102.0</text>
-      <text x="50" y="380" font-size="14" font-family="Arial">1.8</text>
-      <text x="120" y="380" font-size="14" font-family="Arial">205.8 205.8</text>
-      <text x="220" y="380" font-size="14" font-family="Arial">12.0</text>
-      
-      <!-- Agrega aquí otros elementos gráficos (líneas, rectángulos, etc.) si es necesario -->
-      <!-- Ejemplo:
-      <line x1="50" y1="420" x2="300" y2="420" stroke="#000" stroke-width="2" /> -->
+    <!-- 
+      Ajusta el viewBox para que abarque el área total de tu plano.
+      Por ejemplo, si el plano mide ~1200 unidades de ancho y ~800 de alto 
+      (en la escala que definas), lo reflejamos aquí.
+    -->
+    <svg 
+      id="plano-cocina"
+      width="1200" 
+      height="800"
+      viewBox="0 0 1200 800"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <!-- 
+        A partir de aquí, dibujamos línea por línea, mueble por mueble,
+        tal como aparece en el plano. 
+        Cada <line>, <rect>, <path>, <text> debe tener las coordenadas
+        y dimensiones correctas para que todo coincida.
+      -->
+
+      <!-- 1) MARCO EXTERIOR DE LA COCINA -->
+      <!--   Supongamos que la línea más grande es un rectángulo de 113 de alto (a escala),
+             pero en el PDF se ve un contorno mayor. Ajusta las medidas a tu escala. -->
+      <rect 
+        x="50" 
+        y="50" 
+        width="1100" 
+        height="600" 
+        fill="none" 
+        stroke="#000" 
+        stroke-width="2"
+      />
+
+      <!-- 2) LÍNEA DE COTA HORIZONTAL (por ejemplo, la que marca 113.0 de altura) -->
+      <!--   Ejemplo de línea punteada para indicar cota -->
+      <line 
+        x1="50" 
+        y1="400" 
+        x2="500" 
+        y2="400" 
+        stroke="#000" 
+        stroke-width="1" 
+        stroke-dasharray="4 2"
+      />
+      <!-- Texto de la cota: 113.0 -->
+      <text 
+        x="275" 
+        y="390" 
+        font-size="14" 
+        font-family="Arial" 
+        text-anchor="middle"
+      >
+        113.0
+      </text>
+
+      <!-- 3) MUEBLES INFERIORES DE LA COCINA -->
+      <!--   Ejemplo: un conjunto de gabinetes dibujados como rectángulos con diagonales -->
+      <g id="muebles-inferiores">
+        <!-- Gabinete 1 -->
+        <rect 
+          x="100" 
+          y="300" 
+          width="100" 
+          height="80" 
+          fill="none" 
+          stroke="#000" 
+          stroke-width="1"
+        />
+        <!-- Diagonal interna -->
+        <line 
+          x1="100" 
+          y1="300" 
+          x2="200" 
+          y2="380" 
+          stroke="#000" 
+          stroke-width="1"
+        />
+        <line 
+          x1="200" 
+          y1="300" 
+          x2="100" 
+          y2="380" 
+          stroke="#000" 
+          stroke-width="1"
+        />
+        <!-- Número de gabinete -->
+        <text 
+          x="150" 
+          y="345" 
+          font-size="14" 
+          font-family="Arial" 
+          text-anchor="middle"
+        >
+          26
+        </text>
+      </g>
+
+      <!-- 4) MUEBLES SUPERIORES -->
+      <!--   Ejemplo: un mueble superior a 1.8 del techo, con 102.0 de ancho, etc. -->
+      <g id="muebles-superiores">
+        <rect 
+          x="100" 
+          y="150" 
+          width="120" 
+          height="70" 
+          fill="none" 
+          stroke="#000" 
+          stroke-width="1"
+        />
+        <line 
+          x1="100" 
+          y1="150" 
+          x2="220" 
+          y2="220" 
+          stroke="#000" 
+          stroke-width="1"
+        />
+        <line 
+          x1="220" 
+          y1="150" 
+          x2="100" 
+          y2="220" 
+          stroke="#000" 
+          stroke-width="1"
+        />
+        <!-- Número de gabinete -->
+        <text 
+          x="160" 
+          y="190" 
+          font-size="14" 
+          font-family="Arial" 
+          text-anchor="middle"
+        >
+          33
+        </text>
+      </g>
+
+      <!-- 5) ELECTRODOMÉSTICOS / FREGADERO -->
+      <!--   Ejemplo de fregadero (un rectángulo con un óvalo dentro) -->
+      <g id="fregadero">
+        <rect 
+          x="80" 
+          y="420" 
+          width="90" 
+          height="50" 
+          fill="none" 
+          stroke="#000" 
+          stroke-width="1"
+        />
+        <!-- Óvalo representando la tarja -->
+        <ellipse 
+          cx="125" 
+          cy="445" 
+          rx="30" 
+          ry="15" 
+          fill="none" 
+          stroke="#000" 
+          stroke-width="1"
+        />
+        <!-- Cota: 75.0, 25.8, etc. Ajusta según corresponda -->
+        <text 
+          x="125" 
+          y="410" 
+          font-size="14" 
+          font-family="Arial" 
+          text-anchor="middle"
+        >
+          75.0
+        </text>
+        <text 
+          x="125" 
+          y="490" 
+          font-size="14" 
+          font-family="Arial" 
+          text-anchor="middle"
+        >
+          25.8
+        </text>
+      </g>
+
+      <!-- 6) TEXTO GENERAL: "Detalle calado para iluminacion mod. 8-9" -->
+      <text 
+        x="950" 
+        y="300" 
+        font-size="14" 
+        font-family="Arial"
+      >
+        Detalle calado para
+      </text>
+      <text 
+        x="950" 
+        y="320" 
+        font-size="14" 
+        font-family="Arial"
+      >
+        iluminación mod. 8-9
+      </text>
+
+      <!-- 7) TÍTULO DE LA VISTA -->
+      <text 
+        x="100" 
+        y="600" 
+        font-size="18" 
+        font-family="Arial" 
+        font-weight="bold"
+      >
+        VISTA A
+      </text>
+
+      <!-- Continúa añadiendo cada elemento tal como se ve en el plano:
+           - Líneas punteadas para las cotas
+           - Flechas o marcas en los extremos de cotas
+           - Numeración de puertas y gabinetes
+           - Sombreados (con pattern o hatch) para zonas rayadas
+           - etc.
+      -->
     </svg>
   </div>
   <script src="script.js"></script>
