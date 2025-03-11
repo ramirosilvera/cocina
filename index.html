@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Plano Vista A - Render</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+    }
+    #canvas-container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    svg {
+      border: 1px solid #ccc;
+      background: #fff;
+    }
+    .furniture {
+      stroke: #333;
+      stroke-width: 1;
+    }
+    .label {
+      font-size: 10px;
+      fill: #000;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="canvas-container">
+    <!-- El SVG contendrá el plano renderizado -->
+    <svg id="plan-svg" width="800" height="600" viewBox="0 0 800 600"></svg>
+  </div>
+  <script>
+    // Definición de muebles con sus números, posiciones y dimensiones
+    // Las coordenadas y medidas se han definido para mantener la proporción del plano original.
+    const muebles = [
+      // Muebles del 25 al 30 (blanco laqueado)
+      { num: 25, x: 50,  y: 50,  width: 80, height: 50 },
+      { num: 26, x: 140, y: 50,  width: 80, height: 50 },
+      { num: 27, x: 230, y: 50,  width: 80, height: 50 },
+      { num: 28, x: 320, y: 50,  width: 80, height: 50 },
+      { num: 29, x: 410, y: 50,  width: 80, height: 50 },
+      { num: 30, x: 500, y: 50,  width: 80, height: 50 },
+      // Muebles del 31 al 35 (blanco laqueado)
+      { num: 31, x: 50,  y: 120, width: 80, height: 50 },
+      { num: 32, x: 140, y: 120, width: 80, height: 50 },
+      { num: 33, x: 230, y: 120, width: 80, height: 50 },
+      { num: 34, x: 320, y: 120, width: 80, height: 50 },
+      { num: 35, x: 410, y: 120, width: 80, height: 50 },
+      // Mueble 36 (sin especificar, se muestra en color por defecto)
+      { num: 36, x: 500, y: 120, width: 80, height: 50 },
+      // Muebles del 37 al 41 (rosa quarz)
+      { num: 37, x: 50,  y: 190, width: 80, height: 50 },
+      { num: 38, x: 140, y: 190, width: 80, height: 50 },
+      { num: 39, x: 230, y: 190, width: 80, height: 50 },
+      { num: 40, x: 320, y: 190, width: 80, height: 50 },
+      { num: 41, x: 410, y: 190, width: 80, height: 50 }
+      // Se pueden añadir más elementos según se requiera para mantener la fidelidad al plano original
+    ];
+
+    // Función para determinar el color del mueble según su número
+    function getMuebleColor(num) {
+      if ((num >= 25 && num <= 30) || (num >= 31 && num <= 35)) {
+        return "#FFFFFF"; // blanco laqueado
+      } else if (num >= 37 && num <= 41) {
+        return "#F7CAC9"; // rosa quarz aproximado
+      }
+      return "#DDDDDD"; // color por defecto para otros muebles
+    }
+
+    const svg = document.getElementById('plan-svg');
+
+    // Dibujar cada mueble en el SVG
+    muebles.forEach(mueble => {
+      // Crear el rectángulo para representar el mueble
+      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+      rect.setAttribute("x", mueble.x);
+      rect.setAttribute("y", mueble.y);
+      rect.setAttribute("width", mueble.width);
+      rect.setAttribute("height", mueble.height);
+      rect.setAttribute("fill", getMuebleColor(mueble.num));
+      rect.setAttribute("class", "furniture");
+      svg.appendChild(rect);
+
+      // Agregar el número del mueble como etiqueta en el centro del rectángulo
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("x", mueble.x + mueble.width / 2);
+      text.setAttribute("y", mueble.y + mueble.height / 2 + 4);
+      text.setAttribute("text-anchor", "middle");
+      text.setAttribute("class", "label");
+      text.textContent = mueble.num;
+      svg.appendChild(text);
+    });
+  </script>
+</body>
+</html>
