@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Plano Vista A - Render</title>
+  <title>Plano Vista A – Réplica Exacta</title>
   <style>
     body {
       margin: 0;
+      background: #eee;
       font-family: Arial, sans-serif;
-      background: #f0f0f0;
     }
-    #canvas-container {
+    #container {
       width: 100%;
       height: 100vh;
       display: flex;
@@ -17,86 +17,161 @@
       align-items: center;
     }
     svg {
-      border: 1px solid #ccc;
       background: #fff;
+      border: 1px solid #ccc;
     }
-    .furniture {
+    .mueble {
       stroke: #333;
       stroke-width: 1;
     }
-    .label {
+    .etiqueta {
       font-size: 10px;
       fill: #000;
       pointer-events: none;
     }
+    .titulo {
+      font-size: 20px;
+      font-weight: bold;
+      fill: #333;
+    }
+    /* Estilos para detalles adicionales (por ejemplo, líneas de dimensión o calados) */
+    .detalle {
+      stroke: #666;
+      stroke-dasharray: 4;
+      stroke-width: 0.8;
+    }
+    .dim-texto {
+      font-size: 8px;
+      fill: #555;
+    }
   </style>
 </head>
 <body>
-  <div id="canvas-container">
-    <!-- El SVG contendrá el plano renderizado -->
-    <svg id="plan-svg" width="800" height="600" viewBox="0 0 800 600"></svg>
+  <div id="container">
+    <svg id="plano-svg" width="900" height="700" viewBox="0 0 900 700">
+      <!-- Título del plano -->
+      <text x="20" y="30" class="titulo">VISTA A</text>
+    </svg>
   </div>
   <script>
-    // Definición de muebles con sus números, posiciones y dimensiones
-    // Las coordenadas y medidas se han definido para mantener la proporción del plano original.
-    const muebles = [
-      // Muebles del 25 al 30 (blanco laqueado)
-      { num: 25, x: 50,  y: 50,  width: 80, height: 50 },
-      { num: 26, x: 140, y: 50,  width: 80, height: 50 },
-      { num: 27, x: 230, y: 50,  width: 80, height: 50 },
-      { num: 28, x: 320, y: 50,  width: 80, height: 50 },
-      { num: 29, x: 410, y: 50,  width: 80, height: 50 },
-      { num: 30, x: 500, y: 50,  width: 80, height: 50 },
-      // Muebles del 31 al 35 (blanco laqueado)
-      { num: 31, x: 50,  y: 120, width: 80, height: 50 },
-      { num: 32, x: 140, y: 120, width: 80, height: 50 },
-      { num: 33, x: 230, y: 120, width: 80, height: 50 },
-      { num: 34, x: 320, y: 120, width: 80, height: 50 },
-      { num: 35, x: 410, y: 120, width: 80, height: 50 },
-      // Mueble 36 (sin especificar, se muestra en color por defecto)
-      { num: 36, x: 500, y: 120, width: 80, height: 50 },
-      // Muebles del 37 al 41 (rosa quarz)
-      { num: 37, x: 50,  y: 190, width: 80, height: 50 },
-      { num: 38, x: 140, y: 190, width: 80, height: 50 },
-      { num: 39, x: 230, y: 190, width: 80, height: 50 },
-      { num: 40, x: 320, y: 190, width: 80, height: 50 },
-      { num: 41, x: 410, y: 190, width: 80, height: 50 }
-      // Se pueden añadir más elementos según se requiera para mantener la fidelidad al plano original
-    ];
+    // Escala base para transformar medidas (se puede ajustar según el PDF)
+    const escala = 1; // En este ejemplo se usa 1:1, pero se puede modificar
 
-    // Función para determinar el color del mueble según su número
-    function getMuebleColor(num) {
+    // Función para determinar el color según el número de mueble
+    function getColorMueble(num) {
       if ((num >= 25 && num <= 30) || (num >= 31 && num <= 35)) {
-        return "#FFFFFF"; // blanco laqueado
+        return "#FFFFFF"; // Blanco laqueado
       } else if (num >= 37 && num <= 41) {
-        return "#F7CAC9"; // rosa quarz aproximado
+        return "#F7CAC9"; // Rosa quarz (tono aproximado)
       }
-      return "#DDDDDD"; // color por defecto para otros muebles
+      return "#CCCCCC"; // Color neutro para los muebles sin especificación
     }
 
-    const svg = document.getElementById('plan-svg');
+    // Definición de muebles (interpretación basada en el PDF)
+    // Se han agrupado según la secuencia del PDF y se han estimado posiciones y dimensiones
+    const muebles = [
+      // Grupo superior: "35343332" (muebles 35, 34, 33, 32)
+      { num: 35, x: 50,  y: 50,  width: 80, height: 50 },
+      { num: 34, x: 140, y: 50,  width: 80, height: 50 },
+      { num: 33, x: 230, y: 50,  width: 80, height: 50 },
+      { num: 32, x: 320, y: 50,  width: 80, height: 50 },
+      // Grupo siguiente: "3029282726" (muebles 30, 29, 28, 27, 26)
+      { num: 30, x: 50,  y: 120, width: 70, height: 50 },
+      { num: 29, x: 130, y: 120, width: 70, height: 50 },
+      { num: 28, x: 210, y: 120, width: 70, height: 50 },
+      { num: 27, x: 290, y: 120, width: 70, height: 50 },
+      { num: 26, x: 370, y: 120, width: 70, height: 50 },
+      // Grupo: "38 39 40 41" (muebles 38, 39, 40, 41; se incluye el 37 en el siguiente grupo)
+      { num: 38, x: 50,  y: 190, width: 80, height: 50 },
+      { num: 39, x: 140, y: 190, width: 80, height: 50 },
+      { num: 40, x: 230, y: 190, width: 80, height: 50 },
+      { num: 41, x: 320, y: 190, width: 80, height: 50 },
+      // Resto de elementos indicados en el PDF:
+      // Mueble 31 (blanco laqueado)
+      { num: 31, x: 420, y: 50, width: 80, height: 50 },
+      // Mueble 37 (rosa quarz)
+      { num: 37, x: 420, y: 190, width: 80, height: 50 },
+      // Mueble 36 (sin indicación de color, neutro)
+      { num: 36, x: 420, y: 120, width: 80, height: 50 },
+      // Mueble 25 (blanco laqueado)
+      { num: 25, x: 450, y: 260, width: 70, height: 50 },
+      // Grupo: "42 43" (muebles 42 y 43)
+      { num: 42, x: 540, y: 260, width: 70, height: 50 },
+      { num: 43, x: 620, y: 260, width: 70, height: 50 },
+      // Mueble 13
+      { num: 13, x: 50,  y: 260, width: 70, height: 50 },
+      // Mueble 4
+      { num: 4,  x: 130, y: 260, width: 70, height: 50 }
+    ];
 
-    // Dibujar cada mueble en el SVG
+    // Función para crear un rectángulo SVG para cada mueble
+    function crearMueble(m) {
+      const ns = "http://www.w3.org/2000/svg";
+      // Rectángulo base
+      const rect = document.createElementNS(ns, "rect");
+      rect.setAttribute("x", m.x * escala);
+      rect.setAttribute("y", m.y * escala);
+      rect.setAttribute("width", m.width * escala);
+      rect.setAttribute("height", m.height * escala);
+      rect.setAttribute("fill", getColorMueble(m.num));
+      rect.setAttribute("class", "mueble");
+      // Texto identificador en el centro del mueble
+      const texto = document.createElementNS(ns, "text");
+      texto.setAttribute("x", (m.x + m.width / 2) * escala);
+      texto.setAttribute("y", (m.y + m.height / 2 + 4) * escala);
+      texto.setAttribute("text-anchor", "middle");
+      texto.setAttribute("class", "etiqueta");
+      texto.textContent = m.num;
+      return { rect, texto };
+    }
+
+    // Obtener el elemento SVG
+    const svg = document.getElementById("plano-svg");
+
+    // Dibujar todos los muebles según el arreglo definido
     muebles.forEach(mueble => {
-      // Crear el rectángulo para representar el mueble
-      const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-      rect.setAttribute("x", mueble.x);
-      rect.setAttribute("y", mueble.y);
-      rect.setAttribute("width", mueble.width);
-      rect.setAttribute("height", mueble.height);
-      rect.setAttribute("fill", getMuebleColor(mueble.num));
-      rect.setAttribute("class", "furniture");
+      const { rect, texto } = crearMueble(mueble);
       svg.appendChild(rect);
-
-      // Agregar el número del mueble como etiqueta en el centro del rectángulo
-      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-      text.setAttribute("x", mueble.x + mueble.width / 2);
-      text.setAttribute("y", mueble.y + mueble.height / 2 + 4);
-      text.setAttribute("text-anchor", "middle");
-      text.setAttribute("class", "label");
-      text.textContent = mueble.num;
-      svg.appendChild(text);
+      svg.appendChild(texto);
     });
+
+    // (Opcional) Dibujar detalles de iluminación y dimensiones tal como se indica en el PDF.
+    // Se utiliza una interpretación de las medidas (por ejemplo, líneas de dimensión).
+    function dibujarDetalle(x, y, longitud, orientacion = 'horizontal') {
+      const ns = "http://www.w3.org/2000/svg";
+      const linea = document.createElementNS(ns, "line");
+      if (orientacion === 'horizontal') {
+        linea.setAttribute("x1", x * escala);
+        linea.setAttribute("y1", y * escala);
+        linea.setAttribute("x2", (x + longitud) * escala);
+        linea.setAttribute("y2", y * escala);
+      } else {
+        linea.setAttribute("x1", x * escala);
+        linea.setAttribute("y1", y * escala);
+        linea.setAttribute("x2", x * escala);
+        linea.setAttribute("y2", (y + longitud) * escala);
+      }
+      linea.setAttribute("class", "detalle");
+      svg.appendChild(linea);
+      // Agregar texto de dimensión en el centro de la línea
+      const textoDim = document.createElementNS(ns, "text");
+      if (orientacion === 'horizontal') {
+        textoDim.setAttribute("x", (x + longitud / 2) * escala);
+        textoDim.setAttribute("y", (y - 5) * escala);
+      } else {
+        textoDim.setAttribute("x", (x - 20) * escala);
+        textoDim.setAttribute("y", (y + longitud / 2) * escala);
+      }
+      textoDim.setAttribute("class", "dim-texto");
+      textoDim.textContent = longitud.toFixed(1);
+      textoDim.setAttribute("text-anchor", "middle");
+      svg.appendChild(textoDim);
+    }
+
+    // Ejemplo de detalle: se dibuja una línea de dimensión horizontal de 80.0 (según el PDF)
+    dibujarDetalle(50, 10, 80.0, 'horizontal');
+    // Se pueden añadir más detalles según se extraiga de los números (40.0, 20.0, 58.0, etc.)
   </script>
 </body>
 </html>
+
